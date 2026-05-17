@@ -3,6 +3,7 @@
 - English__未完成圖片
 - 日本語__還沒做
 - русский__有空再做 太燒腦
+- español__有空再做 太燒腦
 
 ## 位置: /tasks
 - TestMovement.json << 還沒實裝 不做更改
