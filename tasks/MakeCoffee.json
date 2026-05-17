@@ -1,0 +1,30 @@
+{
+    "task": [
+        {
+            "name": "Auto Make Coffee",
+            "entry": "AutoMakeCoffee",
+            "option": [
+                "MakeCoffeeLoopTime"
+            ]
+        }
+    ],
+    "option": {
+        "MakeCoffeeLoopTime": {
+            "type": "input",
+            "inputs": [
+                {
+                    "name": "Times for cycle",
+                    "default": "10",
+                    "pipeline_type": "int"
+                }
+            ],
+            "pipeline_override": {
+                "AutoMakeCoffee": {
+                    "custom_action_param": {
+                        "count": "{Times for cycle}"
+                    }
+                }
+            }
+        }
+    }
+}

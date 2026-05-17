@@ -1,0 +1,225 @@
+{
+    "task": [
+        {
+            "name": "Fishing Quest mission(old)",
+            "entry": "FishEntrance",
+            "option": [
+                "FishLoopInfinite",
+                "FishNumber",
+                "FishSellAuto",
+                "FishBuyBaitAuto"
+            ]
+        },
+        {
+            "name": "Fishing Quest mission(new)",
+            "entry": "FishNewEntrance",
+            "description": "Redesigned fishing feature. In theory, you can now fish indefinitely.<br><span style='color:red'>It is still not possible to directly resume overnight fishing sessions that have been interrupted by the monthly pass. You can try setting up a scheduled task to continue fishing, but results are not guaranteed.</span><br>The fishing feature only hack-on and uses the mouse for automatically buying bait and selling fish. <br> The auto-buy bait function purchases bait or switches to universal bait when it detects a shortage (the bait detection threshold is unrelated to this task), and the auto-sell function attempts to sell fish when Fish Scale Coins are low.",
+            "option": [
+                "FishSellAuto",
+                "FishBuyBaitAuto"
+            ]
+        }
+    ],
+    "option": {
+        "FishLoopTime": {
+            "type": "input",
+            "label": "Cycle times",
+            "description": "How much cycle times to run the Fishing Quest mission",
+            "inputs": [
+                {
+                    "name": "max_hit",
+                    "label": "Cycle times",
+                    "default": "5",
+                    "pipeline_type": "int",
+                    "verify": "^\\d+$"
+                }
+            ],
+            "pipeline_override": {
+                "FishStart": {
+                    "max_hit": "{max_hit}"
+                }
+            }
+        },
+        "FishNumber": {
+            "type": "input",
+            "label": "Every cycle fishing(count)",
+            "description": "Set every cycles of fishing(count) at auto mode, recommended less than or equal to 99",
+            "inputs": [
+                {
+                    "name": "count",
+                    "label": "count",
+                    "default": "99",
+                    "pipeline_type": "int",
+                    "verify": "^\\d+$"
+                }
+            ],
+            "pipeline_override": {
+                "FishGameStart": {
+                    "custom_action_param": {
+                        "count": "{count}"
+                    }
+                },
+                "FishNewCast": {
+                    "max_hit": "{count}"
+                }
+            }
+        },
+        "FishLoopInfinite": {
+            "type": "switch",
+            "label": "Infinite cycle",
+            "description": "If once enabled, the fishing task will loop indefinitely until manually stopped.",
+            "default_case": "No",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "on",
+                    "pipeline_override": {
+                        "FishEntrance": {
+                            "next": [
+                                "FishLoopStart"
+                            ]
+                        },
+                        "FishGameStart": {
+                            "next": [
+                                "AutoSellFish",
+                                "AutoBuyFishBait",
+                                "FishLoopStart"
+                            ]
+                        },
+                        "AutoSellFish": {
+                            "next": [
+                                "AutoBuyFishBait",
+                                "FishLoopStart"
+                            ]
+                        },
+                        "AutoBuyFishBait": {
+                            "next": [
+                                "FishLoopStart"
+                            ]
+                        },
+                        "FishBaitHandled": {
+                            "next": [
+                                "FishLoopStart"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "off",
+                    "option": [
+                        "FishLoopTime"
+                    ]
+                }
+            ]
+        },
+        "FishSellAuto": {
+            "type": "switch",
+            "label": "Auto sell fish",
+            "description": "Whether to enable the auto sell fish feature",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "on",
+                    "pipeline_override": {
+                        "AutoSellFish": {
+                            "enabled": true
+                        },
+                        "FishNewOpenFishMaster": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "off",
+                    "pipeline_override": {
+                        "AutoSellFish": {
+                            "enabled": false
+                        },
+                        "FishNewOpenFishMaster": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        },
+        "FishBuyBaitAuto": {
+            "type": "switch",
+            "label": "Auto buy fish bait",
+            "description": "Automatically purchase 99 (max) fish baits each time",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "on",
+                    "pipeline_override": {
+                        "AutoBuyFishBait": {
+                            "enabled": true
+                        },
+                        "FishGotoBuyBait": {
+                            "enabled": true
+                        },
+                        "FishNewGotoBuyBait": {
+                            "enabled": true
+                        }
+                    },
+                    "option": [
+                        "FishBaitThreshold"
+                    ]
+                },
+                {
+                    "name": "No",
+                    "label": "off",
+                    "pipeline_override": {
+                        "AutoBuyFishBait": {
+                            "enabled": false
+                        },
+                        "FishGotoBuyBait": {
+                            "enabled": false
+                        },
+                        "FishNewGotoBuyBait": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        },
+        "FishBaitThreshold": {
+            "type": "select",
+            "label": "Bait detection threshold",
+            "description": "If unable to recognize the bait position, please lower this value",
+            "cases": [
+                {
+                    "name": "0.8",
+                    "pipeline_override": {
+                        "AutoBuyFishBait": {
+                            "custom_action_param": {
+                                "found_bait_threshold": 0.8
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "0.7",
+                    "pipeline_override": {
+                        "AutoBuyFishBait": {
+                            "custom_action_param": {
+                                "found_bait_threshold": 0.7
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "0.6",
+                    "pipeline_override": {
+                        "AutoBuyFishBait": {
+                            "custom_action_param": {
+                                "found_bait_threshold": 0.6
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}
