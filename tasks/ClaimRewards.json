@@ -1,0 +1,69 @@
+{
+    "task": [
+        {
+            "name": "领取奖励",
+            "entry": "ClaimRewardsEntrance",
+            "description": "自动领取活跃度/环期赏令的奖励。",
+            "controller": [
+                "Win32",
+                "Win32-Front"
+            ],
+            "option": [
+                "ClaimRewardsActivity",
+                "ClaimRewardsBattlePass"
+            ]
+        }
+    ],
+    "option": {
+        "ClaimRewardsActivity": {
+            "type": "switch",
+            "label": "领取活跃度奖励",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "启用",
+                    "pipeline_override": {
+                        "ClaimRewardsActivity": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "禁用",
+                    "pipeline_override": {
+                        "ClaimRewardsActivity": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ],
+            "default_case": "Yes"
+        },
+        "ClaimRewardsBattlePass": {
+            "type": "switch",
+            "label": "领取环期赏令奖励",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "启用",
+                    "pipeline_override": {
+                        "ClaimRewardsBattlePass": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "禁用",
+                    "pipeline_override": {
+                        "ClaimRewardsBattlePass": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ],
+            "default_case": "Yes"
+        }
+    }
+}
