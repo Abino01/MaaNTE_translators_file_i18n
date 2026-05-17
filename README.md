@@ -6,6 +6,6 @@
 
 > --
 > 位置: /base /image 共通檔案
-> ClaimRewards
-> daily_subscription_reward
-> map_ui
+> ClaimRewards |
+> daily_subscription_reward |
+> map_ui |
