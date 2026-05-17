@@ -1,0 +1,225 @@
+{
+    "task": [
+        {
+            "name": "釣魚任務（舊）",
+            "entry": "FishEntrance",
+            "option": [
+                "FishLoopInfinite",
+                "FishNumber",
+                "FishSellAuto",
+                "FishBuyBaitAuto"
+            ]
+        },
+        {
+            "name": "釣魚任務（新）",
+            "entry": "FishNewEntrance",
+            "description": "重構的釣魚功能。理論上目前能無限釣魚。<br><span style='color:red'>仍無法直接處理被月卡打斷的跨夜釣魚，可以嘗試設置定時任務來繼續釣魚，實際效果無法保證。</span><br>釣魚功能僅自動買魚餌和自動賣魚搶佔滑鼠。<br>自動買魚餌為識別到魚餌不足時購買或切換為萬能魚餌（魚餌識別閾值與本任務無關），賣魚也是在魚鱗幣不足時嘗試賣",
+            "option": [
+                "FishSellAuto",
+                "FishBuyBaitAuto"
+            ]
+        }
+    ],
+    "option": {
+        "FishLoopTime": {
+            "type": "input",
+            "label": "循環次數",
+            "description": "循環執行多少次釣魚任務",
+            "inputs": [
+                {
+                    "name": "max_hit",
+                    "label": "循環次數",
+                    "default": "5",
+                    "pipeline_type": "int",
+                    "verify": "^\\d+$"
+                }
+            ],
+            "pipeline_override": {
+                "FishStart": {
+                    "max_hit": "{max_hit}"
+                }
+            }
+        },
+        "FishNumber": {
+            "type": "input",
+            "label": "每次釣魚數量",
+            "description": "設置每次循環自動釣魚的數量，建議小於等於99",
+            "inputs": [
+                {
+                    "name": "count",
+                    "label": "數量",
+                    "default": "99",
+                    "pipeline_type": "int",
+                    "verify": "^\\d+$"
+                }
+            ],
+            "pipeline_override": {
+                "FishGameStart": {
+                    "custom_action_param": {
+                        "count": "{count}"
+                    }
+                },
+                "FishNewCast": {
+                    "max_hit": "{count}"
+                }
+            }
+        },
+        "FishLoopInfinite": {
+            "type": "switch",
+            "label": "無限循環",
+            "description": "啟用後釣魚任務將無限循環，直到手動停止。",
+            "default_case": "No",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "啟用",
+                    "pipeline_override": {
+                        "FishEntrance": {
+                            "next": [
+                                "FishLoopStart"
+                            ]
+                        },
+                        "FishGameStart": {
+                            "next": [
+                                "AutoSellFish",
+                                "AutoBuyFishBait",
+                                "FishLoopStart"
+                            ]
+                        },
+                        "AutoSellFish": {
+                            "next": [
+                                "AutoBuyFishBait",
+                                "FishLoopStart"
+                            ]
+                        },
+                        "AutoBuyFishBait": {
+                            "next": [
+                                "FishLoopStart"
+                            ]
+                        },
+                        "FishBaitHandled": {
+                            "next": [
+                                "FishLoopStart"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "禁用",
+                    "option": [
+                        "FishLoopTime"
+                    ]
+                }
+            ]
+        },
+        "FishSellAuto": {
+            "type": "switch",
+            "label": "自動賣魚",
+            "description": "是否啟用自動賣魚功能",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "啟用",
+                    "pipeline_override": {
+                        "AutoSellFish": {
+                            "enabled": true
+                        },
+                        "FishNewOpenFishMaster": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "禁用",
+                    "pipeline_override": {
+                        "AutoSellFish": {
+                            "enabled": false
+                        },
+                        "FishNewOpenFishMaster": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        },
+        "FishBuyBaitAuto": {
+            "type": "switch",
+            "label": "自動買魚餌",
+            "description": "每次自動購買99（上限）魚餌",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "啟用",
+                    "pipeline_override": {
+                        "AutoBuyFishBait": {
+                            "enabled": true
+                        },
+                        "FishGotoBuyBait": {
+                            "enabled": true
+                        },
+                        "FishNewGotoBuyBait": {
+                            "enabled": true
+                        }
+                    },
+                    "option": [
+                        "FishBaitThreshold"
+                    ]
+                },
+                {
+                    "name": "No",
+                    "label": "禁用",
+                    "pipeline_override": {
+                        "AutoBuyFishBait": {
+                            "enabled": false
+                        },
+                        "FishGotoBuyBait": {
+                            "enabled": false
+                        },
+                        "FishNewGotoBuyBait": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        },
+        "FishBaitThreshold": {
+            "type": "select",
+            "label": "魚餌識別閾值",
+            "description": "如果無法識別點擊魚餌位置，請調低該數值",
+            "cases": [
+                {
+                    "name": "0.8",
+                    "pipeline_override": {
+                        "AutoBuyFishBait": {
+                            "custom_action_param": {
+                                "found_bait_threshold": 0.8
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "0.7",
+                    "pipeline_override": {
+                        "AutoBuyFishBait": {
+                            "custom_action_param": {
+                                "found_bait_threshold": 0.7
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "0.6",
+                    "pipeline_override": {
+                        "AutoBuyFishBait": {
+                            "custom_action_param": {
+                                "found_bait_threshold": 0.6
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

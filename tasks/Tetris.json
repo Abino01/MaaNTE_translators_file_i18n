@@ -1,0 +1,139 @@
+{
+    "task": [
+        {
+            "name": "泯除方塊",
+            "entry": "TetrisEntrance",
+            "description": "<font color='red'>该任務功能中遊戲内棋盤完全由内部ai自主維護，而非獲取螢幕圖像，在運行该任務時請不要對遊戲畫面進行操作，以免ai決策与實際遊戲狀態不符</font>",
+            "option": [
+                "TetrisAutoRepeat_Single",
+                "TetrisAllowSpeedDrop"
+            ]
+        }
+    ],
+    "option": {
+        "TetrisAutoRepeat_Single": {
+            "type": "switch",
+            "label": "自動連打",
+            "description": "啟用後自動重複多輪，關閉則僅進行一輪",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "啟用",
+                    "option": [
+                        "TetrisConsumeAllVitality_Single"
+                    ],
+                    "pipeline_override": {
+                        "TetrisHandleGameActive": {
+                            "custom_action_param": {
+                                "mode": "single"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "關閉",
+                    "pipeline_override": {
+                        "TetrisHandleGameActive": {
+                            "custom_action_param": {
+                                "mode": "single",
+                                "use_all_vitality": false,
+                                "repeat_count": 1
+                            },
+                            "on_error": ["TetrisExit"]
+                        }
+                    }
+                }
+            ],
+            "default_case": "No"
+        },
+        "TetrisConsumeAllVitality_Single": {
+            "type": "switch",
+            "label": "消耗所有活力",
+            "description": "啟用後自動識別活力值，活力耗盡時自動停止；關閉則按指定輪數連打",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "啟用",
+                    "pipeline_override": {
+                        "TetrisHandleGameActive": {
+                            "custom_action_param": {
+                                "mode": "single",
+                                "use_all_vitality": true
+                            },
+                            "next": [
+                                "[JumpBack]TetrisCheckVitality",
+                                "TetrisExit"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "關閉",
+                    "option": [
+                        "TetrisRepeatCount_Single"
+                    ],
+                    "pipeline_override": {
+                        "TetrisHandleGameActive": {
+                            "custom_action_param": {
+                                "mode": "single",
+                                "use_all_vitality": false
+                            }
+                        }
+                    }
+                }
+            ],
+            "default_case": "No"
+        },
+        "TetrisRepeatCount_Single": {
+            "type": "input",
+            "label": "連打輪數",
+            "description": "自動連打輪數",
+            "inputs": [
+                {
+                    "name": "repeat_count",
+                    "label": "輪數",
+                    "default": "5",
+                    "pipeline_type": "int",
+                    "verify": "^\\d+$"
+                }
+            ],
+            "pipeline_override": {
+                "TetrisHandleGameActive": {
+                    "custom_action_param": {
+                        "mode": "single",
+                        "use_all_vitality": false,
+                        "repeat_count": "{repeat_count}"
+                    },
+                    "on_error": [
+                        "TetrisExit"
+                    ]
+                }
+            }
+        },
+        "TetrisAllowSpeedDrop": {
+            "type": "switch",
+            "label": "允許速降",
+            "description": "啟用後方塊平移/旋轉結束後自動按空格鍵快速下落",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "啟用",
+                    "pipeline_override": {
+                        "TetrisEntrance": {
+                            "custom_action_param": {
+                                "allow_speed_drop": true
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "關閉"
+                }
+            ],
+            "default_case": "No"
+        }
+    }
+}

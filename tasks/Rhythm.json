@@ -1,0 +1,201 @@
+{
+    "task": [
+        {
+            "name": "超強音",
+            "entry": "RhythmEntrance",
+            "option": [
+                "自动选曲",
+                "自动连打",
+                "目标帧率"
+            ]
+        }
+    ],
+    "option": {
+        "自动选曲": {
+            "type": "switch",
+            "label": "自動選曲",
+            "description": "啟用後自動選擇歌曲（迷星叫），關閉則手動指定目標歌曲",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "啟用",
+                    "pipeline_override": {
+                        "RhythmSelectSong": {
+                            "custom_action_param": {
+                                "auto_select": true,
+                                "song_name": ""
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "關閉",
+                    "option": [
+                        "演奏目標歌曲選擇"
+                    ]
+                }
+            ],
+            "default_case": "No"
+        },
+        "演奏目标歌曲选择": {
+            "type": "select",
+            "label": "目標歌曲",
+            "description": "選擇要演奏的歌曲",
+            "cases": [
+                {
+                    "name": "Heroic_Appearance",
+                    "label": "Heroic_Appearance",
+                    "pipeline_override": {
+                        "RhythmSelectSong": {
+                            "custom_action_param": {
+                                "song_name": "Heroic_Appearance"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Destiny",
+                    "label": "Destiny",
+                    "pipeline_override": {
+                        "RhythmSelectSong": {
+                            "custom_action_param": {
+                                "song_name": "Destiny"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Everlasting_Dazing_Summer_Short",
+                    "label": "Everlasting_Dazing_Summer(Short_Ver.)",
+                    "pipeline_override": {
+                        "RhythmSelectSong": {
+                            "custom_action_param": {
+                                "song_name": "Everlasting_Dazing_Summer(Short_Ver.)"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Everlasting_Dazing_Summer",
+                    "label": "Everlasting_Dazing_Summer",
+                    "pipeline_override": {
+                        "RhythmSelectSong": {
+                            "custom_action_param": {
+                                "song_name": "Everlasting_Dazing_Summer"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "迷星叫",
+                    "label": "迷星叫",
+                    "pipeline_override": {
+                        "RhythmSelectSong": {
+                            "custom_action_param": {
+                                "song_name": "迷星叫"
+                            }
+                        }
+                    }
+                }
+            ],
+            "default_case": "Heroic_Appearance"
+        },
+        "自动连打": {
+            "type": "switch",
+            "label": "自動連打",
+            "description": "啟用後連續演奏指定次數，關閉則僅演奏一次",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "啟用",
+                    "option": [
+                        "連打模式"
+                    ]
+                },
+                {
+                    "name": "No",
+                    "label": "關閉",
+                    "pipeline_override": {
+                        "RhythmRepeatCheck": {
+                            "custom_action_param": {
+                                "auto_repeat_count": 0,
+                                "auto_repeat_max": false
+                            }
+                        }
+                    }
+                }
+            ],
+            "default_case": "No"
+        },
+        "连打模式": {
+            "type": "switch",
+            "label": "連打直到活力耗盡",
+            "description": "開啟後自動連打直到活力耗盡，關閉則使用固定次數",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "Max",
+                    "pipeline_override": {
+                        "RhythmRepeatCheck": {
+                            "custom_action_param": {
+                                "auto_repeat_max": true
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "固定次數",
+                    "option": [
+                        "連打次數"
+                    ]
+                }
+            ],
+            "default_case": "No"
+        },
+        "连打次数": {
+            "type": "input",
+            "label": "連打次數",
+            "description": "連續演奏的次數",
+            "inputs": [
+                {
+                    "name": "auto_repeat_count",
+                    "label": "次數",
+                    "default": "5",
+                    "pipeline_type": "int",
+                    "verify": "^\\d+$"
+                }
+            ],
+            "pipeline_override": {
+                "RhythmRepeatCheck": {
+                    "custom_action_param": {
+                        "auto_repeat_count": "{auto_repeat_count}",
+                        "auto_repeat_max": false
+                    }
+                }
+            }
+        },
+        "目标帧率": {
+            "type": "input",
+            "label": "目標幀率",
+            "description": "演奏循環的每秒幀率，建议30~120",
+            "inputs": [
+                {
+                    "name": "target_fps",
+                    "label": "FPS",
+                    "default": "60",
+                    "pipeline_type": "int",
+                    "verify": "^\\d+$"
+                }
+            ],
+            "pipeline_override": {
+                "RhythmPlaying": {
+                    "custom_action_param": {
+                        "target_fps": "{target_fps}"
+                    }
+                }
+            }
+        }
+    }
+}

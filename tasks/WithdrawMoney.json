@@ -1,0 +1,43 @@
+{
+    "task": [
+        {
+            "name": "領取一咖舍收益",
+            "entry": "WithdrawMoneyEntrance",
+            "description": "自動領取一咖舍收益<br><span style='color:red'>暫不支持根據風向標自動替換商品，若在意損失，建議關閉</span>",
+            "option": [
+                "Restock"
+            ],
+            "controller": [
+                "Win32-Front"
+            ]
+        }
+    ],
+    "option": {
+        "Restock": {
+            "type": "switch",
+            "label": "自動補貨",
+            "description": "是否啟用自動補貨功能",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "啟用",
+                    "pipeline_override": {
+                        "点击补货": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "禁用",
+                    "pipeline_override": {
+                        "点击补货": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ],
+            "default_case": "No"
+        }
+    }
+}
