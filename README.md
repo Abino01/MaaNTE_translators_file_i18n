@@ -10,9 +10,9 @@
 
 #--
 ## 位置: /base /image 共通檔案
-- ClaimRewards |
-- daily_subscription_reward |
-- map_ui |
+- ClaimRewards
+- daily_subscription_reward
+- map_ui
 
 #--
 ## 位置: /base /image /Common /Scene 沒月卡 所以沒更新
