@@ -1,4 +1,4 @@
-#備忘錄
+# 備忘錄
 - 繁體中文__OK
 - English__未完成圖片
 - 日本語__還沒做
@@ -15,8 +15,7 @@
 - map_ui |
 
 #--
-## 位置: 
-- /base /image /Common /Scene  //SceneExitComfirm.png
-- /base /image /Common /Scene /EscMenu //EscMenuSign.png
-- /base /image /Common /Scene /Login //MonthlyPass.png
-- 沒月卡 所以沒更新
+## 位置: /base /image /Common /Scene 沒月卡 所以沒更新
+- //SceneExitComfirm.png
+- /EscMenu //EscMenuSign.png
+- /Login //MonthlyPass.png
