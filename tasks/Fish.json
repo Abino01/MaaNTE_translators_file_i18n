@@ -1,0 +1,225 @@
+{
+    "task": [
+        {
+            "name": "釣り任務（旧）",
+            "entry": "FishEntrance",
+            "option": [
+                "FishLoopInfinite",
+                "FishNumber",
+                "FishSellAuto",
+                "FishBuyBaitAuto"
+            ]
+        },
+        {
+            "name": "釣り任務（新）",
+            "entry": "FishNewEntrance",
+            "description": "釣り機能の再設計。理論上は現在、無制限に釣りが可能です。<br><span style='color:red'>月額登録が中断した深夜の釣りについては、依然として直接対応できません。タイマー設定を利用して釣りを継続することは可能ですが、実際の効果は保証できません。</span><br>釣り機能は、餌をの自動購入と釣れた魚の自動売却のみがマウス操作を占有します。<br>「自動で餌を購入」は、餌が不足していると検知した際に購入するか、万能餌に切り替える機能です（餌の検知閾値はこのタスクとは関係ありません）。また、「魚を売る」機能も、魚鱗コインが不足している場合に売却を試みます。",
+            "option": [
+                "FishSellAuto",
+                "FishBuyBaitAuto"
+            ]
+        }
+    ],
+    "option": {
+        "FishLoopTime": {
+            "type": "input",
+            "label": "循環回数",
+            "description": "繰り返し実行する釣り作業の回数",
+            "inputs": [
+                {
+                    "name": "max_hit",
+                    "label": "循環回数",
+                    "default": "5",
+                    "pipeline_type": "int",
+                    "verify": "^\\d+$"
+                }
+            ],
+            "pipeline_override": {
+                "FishStart": {
+                    "max_hit": "{max_hit}"
+                }
+            }
+        },
+        "FishNumber": {
+            "type": "input",
+            "label": "1回周期の釣獲数",
+            "description": "1回周期で自動釣りを行う回数を設定します。99以下にすることをお勧めします。",
+            "inputs": [
+                {
+                    "name": "count",
+                    "label": "数量",
+                    "default": "99",
+                    "pipeline_type": "int",
+                    "verify": "^\\d+$"
+                }
+            ],
+            "pipeline_override": {
+                "FishGameStart": {
+                    "custom_action_param": {
+                        "count": "{count}"
+                    }
+                },
+                "FishNewCast": {
+                    "max_hit": "{count}"
+                }
+            }
+        },
+        "FishLoopInfinite": {
+            "type": "switch",
+            "label": "無限循環",
+            "description": "有効にすると、釣りタスクは手動で停止されるまで無限に循環します。",
+            "default_case": "No",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "有効にする",
+                    "pipeline_override": {
+                        "FishEntrance": {
+                            "next": [
+                                "FishLoopStart"
+                            ]
+                        },
+                        "FishGameStart": {
+                            "next": [
+                                "AutoSellFish",
+                                "AutoBuyFishBait",
+                                "FishLoopStart"
+                            ]
+                        },
+                        "AutoSellFish": {
+                            "next": [
+                                "AutoBuyFishBait",
+                                "FishLoopStart"
+                            ]
+                        },
+                        "AutoBuyFishBait": {
+                            "next": [
+                                "FishLoopStart"
+                            ]
+                        },
+                        "FishBaitHandled": {
+                            "next": [
+                                "FishLoopStart"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "無効にする",
+                    "option": [
+                        "FishLoopTime"
+                    ]
+                }
+            ]
+        },
+        "FishSellAuto": {
+            "type": "switch",
+            "label": "自動魚販売",
+            "description": "自動魚売却機能を有効にするか",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "有効にする",
+                    "pipeline_override": {
+                        "AutoSellFish": {
+                            "enabled": true
+                        },
+                        "FishNewOpenFishMaster": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "無効にする",
+                    "pipeline_override": {
+                        "AutoSellFish": {
+                            "enabled": false
+                        },
+                        "FishNewOpenFishMaster": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        },
+        "FishBuyBaitAuto": {
+            "type": "switch",
+            "label": "餌を自動購入",
+            "description": "1回周期で自動的に餌を購入します（上限99）",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "有効にする",
+                    "pipeline_override": {
+                        "AutoBuyFishBait": {
+                            "enabled": true
+                        },
+                        "FishGotoBuyBait": {
+                            "enabled": true
+                        },
+                        "FishNewGotoBuyBait": {
+                            "enabled": true
+                        }
+                    },
+                    "option": [
+                        "FishBaitThreshold"
+                    ]
+                },
+                {
+                    "name": "No",
+                    "label": "無効にする",
+                    "pipeline_override": {
+                        "AutoBuyFishBait": {
+                            "enabled": false
+                        },
+                        "FishGotoBuyBait": {
+                            "enabled": false
+                        },
+                        "FishNewGotoBuyBait": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        },
+        "FishBaitThreshold": {
+            "type": "select",
+            "label": "餌の識別閾値",
+            "description": "餌の位置が認識できない場合は、この数値を下げてください",
+            "cases": [
+                {
+                    "name": "0.8",
+                    "pipeline_override": {
+                        "AutoBuyFishBait": {
+                            "custom_action_param": {
+                                "found_bait_threshold": 0.8
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "0.7",
+                    "pipeline_override": {
+                        "AutoBuyFishBait": {
+                            "custom_action_param": {
+                                "found_bait_threshold": 0.7
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "0.6",
+                    "pipeline_override": {
+                        "AutoBuyFishBait": {
+                            "custom_action_param": {
+                                "found_bait_threshold": 0.6
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

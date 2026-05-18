@@ -1,0 +1,69 @@
+{
+    "task": [
+        {
+            "name": "報酬を受け取る",
+            "entry": "ClaimRewardsEntrance",
+            "description": "自動でシティスタミナ/ハンター褒章受け取る報酬。",
+            "controller": [
+                "Win32",
+                "Win32-Front"
+            ],
+            "option": [
+                "ClaimRewardsActivity",
+                "ClaimRewardsBattlePass"
+            ]
+        }
+    ],
+    "option": {
+        "ClaimRewardsActivity": {
+            "type": "switch",
+            "label": "シティスタミナ報酬を受け取る。",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "有効にする",
+                    "pipeline_override": {
+                        "ClaimRewardsActivity": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "無効にする",
+                    "pipeline_override": {
+                        "ClaimRewardsActivity": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ],
+            "default_case": "Yes"
+        },
+        "ClaimRewardsBattlePass": {
+            "type": "switch",
+            "label": "ハンター褒章報酬を受け取る。",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "有効にする",
+                    "pipeline_override": {
+                        "ClaimRewardsBattlePass": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "無効にする",
+                    "pipeline_override": {
+                        "ClaimRewardsBattlePass": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ],
+            "default_case": "Yes"
+        }
+    }
+}

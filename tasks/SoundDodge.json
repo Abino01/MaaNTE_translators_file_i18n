@@ -1,0 +1,114 @@
+{
+    "task": [
+        {
+            "name": "音の回避",
+            "entry": "SoundDodgeMain",
+            "description": "音声識別に基づく自動回避および反撃には、[color:red]“デスクトップ端末（フォアグラウンド）”[/color]コントローラーが必要です",
+            "option": [
+                "SoundDodgeEnable",
+                "SoundDodgeAllAttacks",
+                "SoundDodgeThreshold",
+                "SoundCounterThreshold"
+            ],
+            "controller": [
+                "Win32-Front"
+            ]
+        }
+    ],
+    "option": {
+        "SoundDodgeEnable": {
+            "type": "switch",
+            "label": "音の回避を有効にする",
+            "description": "有効にすると、ゲーム音効を識別して自動的に回避をトリガーします",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "有効にする",
+                    "pipeline_override": {}
+                },
+                {
+                    "name": "No",
+                    "label": "無効にする",
+                    "pipeline_override": {
+                        "SoundDodgeMain": {
+                            "custom_action_param": {
+                                "enable_sound_trigger": false
+                            }
+                        }
+                    }
+                }
+            ],
+            "default_case": "Yes"
+        },
+        "SoundDodgeAllAttacks": {
+            "type": "switch",
+            "label": "回避のみ",
+            "description": "発動後は回避行動のみを実行し、反撃は行わない",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "回避のみ",
+                    "pipeline_override": {
+                        "SoundDodgeMain": {
+                            "custom_action_param": {
+                                "dodge_all_attacks": true
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "回避+反撃",
+                    "pipeline_override": {
+                        "SoundDodgeMain": {
+                            "custom_action_param": {
+                                "dodge_all_attacks": false
+                            }
+                        }
+                    }
+                }
+            ],
+            "default_case": "Yes"
+        },
+        "SoundDodgeThreshold": {
+            "type": "input",
+            "label": "回避の閾値",
+            "description": "回避閾値。範囲は0.0～1.0。数値が低いほど感度が高くなります。",
+            "inputs": [
+                {
+                    "name": "threshold",
+                    "default": "0.13",
+                    "pipeline_type": "string",
+                    "verify": "^0\\.\\d+$|^1\\.0*$"
+                }
+            ],
+            "pipeline_override": {
+                "SoundDodgeMain": {
+                    "custom_action_param": {
+                        "threshold": "{threshold}"
+                    }
+                }
+            }
+        },
+        "SoundCounterThreshold": {
+            "type": "input",
+            "label": "反撃の閾値",
+            "description": "反撃の発動閾値。範囲は0.0～1.0。数値が低いほど感度が高くなります。",
+            "inputs": [
+                {
+                    "name": "counter_threshold",
+                    "default": "0.12",
+                    "pipeline_type": "string",
+                    "verify": "^0\\.\\d+$|^1\\.0*$"
+                }
+            ],
+            "pipeline_override": {
+                "SoundDodgeMain": {
+                    "custom_action_param": {
+                        "counter_attack_threshold": "{counter_threshold}"
+                    }
+                }
+            }
+        }
+    }
+}

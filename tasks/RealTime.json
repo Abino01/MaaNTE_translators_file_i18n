@@ -1,0 +1,192 @@
+{
+    "task": [
+        {
+            "name": "リアルタイム支援",
+            "entry": "RealTimeTaskMain",
+            "description": "リアルタイム支援ツール，必要[color:red]“デスクトップ版 - フロントエンド”[/color]控制器",
+            "option": [
+                "RealTimeCheckInterval",
+                "RealTimeAutoSkipStory",
+                "RealTimeAutoTeleport"
+            ],
+            "controller": [
+                "Win32-Front"
+            ]
+        }
+    ],
+    "option": {
+        "RealTimeCheckInterval": {
+            "type": "input",
+            "label": "検知間隔 (ms)",
+            "description": "2回の検知間隔（単位：ミリ秒）",
+            "inputs": [
+                {
+                    "name": "interval",
+                    "default": "500",
+                    "pipeline_type": "int",
+                    "verify": "^\\d+$"
+                }
+            ],
+            "pipeline_override": {
+                "RealTimeSleep": {
+                    "post_delay": "{interval}"
+                }
+            }
+        },
+        "RealTimeAutoSkipStory": {
+            "type": "switch",
+            "label": "自動劇情",
+            "description": "自動で劇情ボタンをクリック",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "有効にする",
+                    "option": [
+                        "RealTimeAutoSkipStoryDialog"
+                    ],
+                    "pipeline_override": {
+                        "RealTimeSkipStory": {
+                            "enabled": true
+                        },
+                        "RealTimeSkipStoryDialogConfirm": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "無効にする",
+                    "pipeline_override": {
+                        "RealTimeSkipStory": {
+                            "enabled": false
+                        },
+                        "RealTimeSkipStoryDialog": {
+                            "enabled": false
+                        },
+                        "RealTimeSkipStoryDialogConfirm": {
+                            "enabled": false
+                        },
+                        "RealTimeSkipStoryDialogCheckbox": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ],
+            "default_case": "Yes"
+        },
+        "RealTimeAutoSkipStoryDialog": {
+            "type": "switch",
+            "label": "自動で“今日不再提示”をチェック",
+            "description": "劇情をスキップするダイアログで、自動で“今日不再提示”をチェックし、毎回確認ダイアログが表示されるのを防ぐ",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "有効にする",
+                    "pipeline_override": {
+                        "RealTimeSkipStoryDialogCheckbox": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "無効にする",
+                    "pipeline_override": {
+                        "RealTimeSkipStoryDialogCheckbox": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ],
+            "default_case": "Yes"
+        },
+        "RealTimeAutoTeleport": {
+            "type": "switch",
+            "label": "自動伝送",
+            "description": "特定の传送点を検知した場合に自動で传送ボタンをクリック",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "有効にする",
+                    "option": [
+                        "RealTimeAutoTeleportWitte",
+                        "RealTimeAutoTeleportPhone"
+                    ]
+                },
+                {
+                    "name": "No",
+                    "label": "無効にする",
+                    "pipeline_override": {
+                        "RealTimeTeleportWitte": {
+                            "enabled": false
+                        },
+                        "RealTimeTeleportPhone": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ],
+            "default_case": "No"
+        },
+        "RealTimeAutoTeleportWitte": {
+            "type": "switch",
+            "label": "ヴェルテハイモー塔",
+            "description": "転送ヴェルテハイモー塔のテレポートポイントを検出する",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "pipeline_override": {
+                        "RealTimeTeleportWitte": {
+                            "enabled": true
+                        },
+                        "RealTimeConfirmTeleportWitte": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "pipeline_override": {
+                        "RealTimeTeleportWitte": {
+                            "enabled": false
+                        },
+                        "RealTimeConfirmTeleportWitte": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ],
+            "default_case": "Yes"
+        },
+        "RealTimeAutoTeleportPhone": {
+            "type": "switch",
+            "label": "ReroRero電話ボックス",
+            "description": "ReroRero電話ボックスのテレポートポイントを検出する",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "pipeline_override": {
+                        "RealTimeTeleportPhone": {
+                            "enabled": true
+                        },
+                        "RealTimeConfirmTeleportPhone": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "pipeline_override": {
+                        "RealTimeTeleportPhone": {
+                            "enabled": false
+                        },
+                        "RealTimeConfirmTeleportPhone": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ],
+            "default_case": "Yes"
+        }
+    }
+}

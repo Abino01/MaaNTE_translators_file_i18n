@@ -1,0 +1,12 @@
+{
+    "task": [
+        {
+            "name": "毎日のナクペンダの池チェックイン",
+            "entry": "FountainCheckinEntrance",
+            "description": "噴水のチェックイン位置を識別し、チェックインボタンタップしてください。",
+            "controller": [
+                "Win32-Front"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,139 @@
+{
+    "task": [
+        {
+            "name": "排除パズル",
+            "entry": "TetrisEntrance",
+            "description": "<font color='red'>本タスク機能で利用するゲーム内盤面は、AIが独自に管理しており、画面画像を取得するものではありません。実行中は、AIの判断と実際のゲーム状況が一致しないことを防ぐため、ゲーム画面を操作しないでください。</font>",
+            "option": [
+                "TetrisAutoRepeat_Single",
+                "TetrisAllowSpeedDrop"
+            ]
+        }
+    ],
+    "option": {
+        "TetrisAutoRepeat_Single": {
+            "type": "switch",
+            "label": "自動連打",
+            "description": "有効にすると自動的に複数回繰り返します。無効にすると1回のみ実行します。",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "有効にする",
+                    "option": [
+                        "TetrisConsumeAllVitality_Single"
+                    ],
+                    "pipeline_override": {
+                        "TetrisHandleGameActive": {
+                            "custom_action_param": {
+                                "mode": "single"
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "無効にする",
+                    "pipeline_override": {
+                        "TetrisHandleGameActive": {
+                            "custom_action_param": {
+                                "mode": "single",
+                                "use_all_vitality": false,
+                                "repeat_count": 1
+                            },
+                            "on_error": ["TetrisExit"]
+                        }
+                    }
+                }
+            ],
+            "default_case": "No"
+        },
+        "TetrisConsumeAllVitality_Single": {
+            "type": "switch",
+            "label": "シティスタミナがを全消費する",
+            "description": "有効にすると自動的にシティスタミナがを認識し、シティスタミナが消費されると自動的に停止します。無効にすると指定されたラウンド数で連打します。",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "有効にする",
+                    "pipeline_override": {
+                        "TetrisHandleGameActive": {
+                            "custom_action_param": {
+                                "mode": "single",
+                                "use_all_vitality": true
+                            },
+                            "next": [
+                                "[JumpBack]TetrisCheckVitality",
+                                "TetrisExit"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "無効にする",
+                    "option": [
+                        "TetrisRepeatCount_Single"
+                    ],
+                    "pipeline_override": {
+                        "TetrisHandleGameActive": {
+                            "custom_action_param": {
+                                "mode": "single",
+                                "use_all_vitality": false
+                            }
+                        }
+                    }
+                }
+            ],
+            "default_case": "No"
+        },
+        "TetrisRepeatCount_Single": {
+            "type": "input",
+            "label": "連続回数",
+            "description": "自動連打回数",
+            "inputs": [
+                {
+                    "name": "repeat_count",
+                    "label": "回数",
+                    "default": "5",
+                    "pipeline_type": "int",
+                    "verify": "^\\d+$"
+                }
+            ],
+            "pipeline_override": {
+                "TetrisHandleGameActive": {
+                    "custom_action_param": {
+                        "mode": "single",
+                        "use_all_vitality": false,
+                        "repeat_count": "{repeat_count}"
+                    },
+                    "on_error": [
+                        "TetrisExit"
+                    ]
+                }
+            }
+        },
+        "TetrisAllowSpeedDrop": {
+            "type": "switch",
+            "label": "素早く落下します",
+            "description": "有効にすると、ブロックの移動や回転が終了した後に自動的にスペースキーが押され、素早く落下します",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "有効にする",
+                    "pipeline_override": {
+                        "TetrisEntrance": {
+                            "custom_action_param": {
+                                "allow_speed_drop": true
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "無効にする"
+                }
+            ],
+            "default_case": "No"
+        }
+    }
+}

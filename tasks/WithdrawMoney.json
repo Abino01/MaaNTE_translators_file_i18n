@@ -1,0 +1,43 @@
+{
+    "task": [
+        {
+            "name": "「壱のコーヒー」の収益を受け取る",
+            "entry": "WithdrawMoneyEntrance",
+            "description": "「壱のコーヒー」の収益自動で受け取る<br><span style='color:red'>現状では、風見鶏の指標に応じて商品を自動的に切り替える機能は未対応です。損失が心配な場合は、本機能を設定しないようにお勧めします。</span>",
+            "option": [
+                "Restock"
+            ],
+            "controller": [
+                "Win32-Front"
+            ]
+        }
+    ],
+    "option": {
+        "Restock": {
+            "type": "switch",
+            "label": "自動補貨",
+            "description": "自動補貨機能を有効にするかどうか",
+            "cases": [
+                {
+                    "name": "Yes",
+                    "label": "有効にする",
+                    "pipeline_override": {
+                        "点击补货": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "No",
+                    "label": "無効にする",
+                    "pipeline_override": {
+                        "点击补货": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ],
+            "default_case": "No"
+        }
+    }
+}
