@@ -1,6 +1,6 @@
 # 本人負責資料:
--assets /resource /base /image /... (只負責圖片)
--assets /resource /tasks /... (只負責介面翻譯)
+- assets /resource /base /image /... (只負責圖片)
+- assets /resource /tasks /... (只負責介面翻譯)
 - 
 # 備忘錄
 - 繁體中文__OK
