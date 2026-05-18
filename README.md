@@ -31,9 +31,9 @@
 ## 提交範例
 - .zip
 - ↳ assets /resource /base /image /
--  ↳ 圖片.png
--  ↳ 圖片.png
+-  -↳ 圖片.png
+-  -↳ 圖片.png
 - ↳ assets /resource /tasks /
--  ↳ 介面原檔(未翻譯的UI介面檔案).json
+-  -↳ 介面原檔(未翻譯的UI介面檔案).json
 -
 # https://github.com/1bananachicken/MaaNTE 更新到 05/17 12:00:00
