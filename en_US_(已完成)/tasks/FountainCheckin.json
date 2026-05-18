@@ -1,0 +1,12 @@
+{
+    "task": [
+        {
+            "name": "Nacupeda's Pool Check-in",
+            "entry": "FountainCheckinEntrance",
+            "description": "Identify and click the Nacupeda's Pool Check-in button。",
+            "controller": [
+                "Win32-Front"
+            ]
+        }
+    ]
+}
