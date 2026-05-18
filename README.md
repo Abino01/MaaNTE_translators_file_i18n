@@ -1,6 +1,9 @@
 # 本人負責資料:
-- assets /resource /base /image /... (只負責圖片)
-- assets /resource /tasks /... (只負責介面翻譯)
+- assets /resource /base /image /... (圖片)
+- assets /resource /tasks /... (介面翻譯)
+- 本人只負責跟介面翻譯 如果有新的要做翻譯請直接提交issues
+- 提交的issues內容檔案請用.zip封裝 並且只丟本人負責的區塊 最下面有範例
+- 做完會放在 addon裡面 會以你的專案+日期命名 例如: Ur_pjt0111_2359
 - 
 # 備忘錄
 - 繁體中文__OK
@@ -24,5 +27,12 @@
 - /EscMenu //EscMenuSign.png
 - /Login //MonthlyPass.png
 - 
-#--
+## 提交範例
+- .zip
+- >assets /resource /base /image /
+- >> 圖片.png
+- >> 圖片.png
+- > assets /resource /tasks /
+- >> 介面原檔(未翻譯的UI介面檔案).json
+-
 # https://github.com/1bananachicken/MaaNTE 更新到 05/17 12:00:00
