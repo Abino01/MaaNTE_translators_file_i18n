@@ -19,3 +19,6 @@
 - //SceneExitComfirm.png
 - /EscMenu //EscMenuSign.png
 - /Login //MonthlyPass.png
+
+#--
+# https://github.com/1bananachicken/MaaNTE 更新到 05*17
