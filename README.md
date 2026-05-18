@@ -7,6 +7,7 @@
 - 例如: {your_project_name}_MMDD_HHMM
 - 
 # 備忘錄
+- 简体中文__原生
 - 繁體中文__OK
 - English__OK
 - 日本語__OK
