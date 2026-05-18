@@ -1,9 +1,0 @@
-{
-    "task": [
-        {
-            "name": "Fast picking for mission: Pink Paws Heist (Hold down F to trigger)",
-            "entry": "AutoFScroll",
-            "description": "When opened, it will Hold F+ and use the scroll wheel to pick up items quickly（Hold down F to trigger）"
-        }
-    ]
-}
