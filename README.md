@@ -1,4 +1,4 @@
-# 本人負責資料:
+# 本人負責資料: X（本項目關閉　不再更新）X
 - assets /resource /base /image /... (圖片)
 - assets /resource /tasks /... (介面翻譯)
 - 本人只負責跟介面翻譯 如果有新的要做翻譯請直接提交issues
